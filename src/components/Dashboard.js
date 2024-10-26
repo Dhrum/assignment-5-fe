@@ -3,40 +3,37 @@ import axios from 'axios';
 
 const Dashboard = () => {
     const [purchases, setPurchases] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPurchases = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/purchases`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/purchases/me`, {
+                    headers: { Authorization: `Bearer ${token}` },
                 });
                 setPurchases(response.data);
+                setLoading(false);
             } catch (error) {
-                console.error('Error fetching purchases:', error.message);
+                console.error('Error fetching purchases:', error);
             }
         };
 
         fetchPurchases();
     }, []);
 
+    if (loading) return <p>Loading...</p>;
+
     return (
         <div>
-            <h2>Dashboard</h2>
-            <h3>Your Purchases</h3>
-            {purchases.length > 0 ? (
-                <ul>
-                    {purchases.map((purchase) => (
-                        <li key={purchase._id}>
-                            {purchase.product.name} - {purchase.quantity} pcs - ${purchase.totalPrice}
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No purchases found.</p>
-            )}
+            <h2>My Purchases</h2>
+            <ul>
+                {purchases.map((purchase) => (
+                    <li key={purchase._id}>
+                        Product: {purchase.productId.name}, Quantity: {purchase.quantity}, Total: ${purchase.totalPrice}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };

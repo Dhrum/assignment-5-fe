@@ -1,94 +1,142 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { auth } from '../firebaseConfig';
+import './Profile.css';
 
 const Profile = () => {
-    const [profile, setProfile] = useState({
+    const [user, setUser] = useState({
         name: '',
         email: '',
         phone: '',
         address: '',
+        profileImage: '',
     });
     const [isEditing, setIsEditing] = useState(false);
+    const [imagePreview, setImagePreview] = useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchProfile = async () => {
+        const fetchUserProfile = async () => {
             try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/auth/me`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                const token = await auth.currentUser?.getIdToken();
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/users/me`, {
+                    headers: { Authorization: `Bearer ${token}` },
                 });
-                setProfile(response.data);
+                setUser(response.data);
+                setImagePreview(response.data.profilePicture || 'https://via.placeholder.com/150?text=Avatar');
+                setLoading(false);
             } catch (error) {
-                console.error('Error fetching profile:', error.message);
+                console.error('Error fetching user profile:', error);
+                setLoading(false);
             }
         };
 
-        fetchProfile();
+        fetchUserProfile();
     }, []);
 
-    const handleChange = (e) => {
-        setProfile({ ...profile, [e.target.name]: e.target.value });
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUser({ ...user, [name]: value });
     };
 
-    const handleUpdate = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/profile`, profile, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setIsEditing(false);
-            alert('Profile updated successfully');
-        } catch (error) {
-            console.error('Error updating profile:', error.message);
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setUser({ ...user, profileImage: file });
+            setImagePreview(URL.createObjectURL(file));
         }
     };
 
+    const handleSaveChanges = async () => {
+        try {
+            const token = await auth.currentUser?.getIdToken();
+
+            const formData = new FormData();
+            formData.append('name', user.name);
+            formData.append('phone', user.phone);
+            formData.append('address', user.address);
+
+            if (user.profileImage && user.profileImage instanceof File) {
+                formData.append('profileImage', user.profileImage);
+            }
+
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/users/update`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            setIsEditing(false);
+            alert('Profile updated successfully');
+        } catch (error) {
+            console.error('Error updating profile:', error.response?.data || error);
+        }
+    };
+
+    if (loading) return <p>Loading...</p>;
+
     return (
-        <div>
+        <div className="profile-container">
             <h2>Profile</h2>
-            <div>
-                <label>Name:</label>
-                <input
-                    type="text"
-                    name="name"
-                    value={profile.name}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
+            <div className="profile-info">
+                <div className="profile-image">
+                    <img
+                        src={imagePreview}
+                        alt="Profile"
+                        onError={(e) => (e.target.src = 'https://via.placeholder.com/150?text=Avatar')}
+                    />
+                    {isEditing && (
+                        <input type="file" accept="image/*" onChange={handleImageChange} />
+                    )}
+                </div>
+                <div className="profile-details">
+                    <label>
+                        Name:
+                        <input
+                            type="text"
+                            name="name"
+                            value={user.name}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                        />
+                    </label>
+                    <label>
+                        Email:
+                        <input
+                            type="email"
+                            name="email"
+                            value={user.email}
+                            disabled // Email is not editable
+                        />
+                    </label>
+                    <label>
+                        Phone:
+                        <input
+                            type="text"
+                            name="phone"
+                            value={user.phone}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                        />
+                    </label>
+                    <label>
+                        Address:
+                        <input
+                            type="text"
+                            name="address"
+                            value={user.address}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                        />
+                    </label>
+                    {isEditing ? (
+                        <button onClick={handleSaveChanges}>Save Changes</button>
+                    ) : (
+                        <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+                    )}
+                </div>
             </div>
-            <div>
-                <label>Email:</label>
-                <input type="email" value={profile.email} disabled />
-            </div>
-            <div>
-                <label>Phone:</label>
-                <input
-                    type="text"
-                    name="phone"
-                    value={profile.phone}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            <div>
-                <label>Address:</label>
-                <input
-                    type="text"
-                    name="address"
-                    value={profile.address}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            {isEditing ? (
-                <button onClick={handleUpdate}>Save Changes</button>
-            ) : (
-                <button onClick={() => setIsEditing(true)}>Edit Profile</button>
-            )}
         </div>
     );
 };

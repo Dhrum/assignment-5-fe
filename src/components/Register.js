@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { auth, googleProvider } from '../firebaseConfig';
-import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 
 const Register = () => {
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -16,9 +16,16 @@ const Register = () => {
         e.preventDefault();
         try {
             const { user } = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+            const token = await auth.currentUser?.getIdToken();
+            console.log(token);
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
                 name: formData.name,
                 email: user.email,
+                password: formData.password
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
             navigate('/login');
         } catch (error) {
@@ -28,7 +35,7 @@ const Register = () => {
 
     const handleGoogleRegister = async () => {
         try {
-            const result = await signInWithPopup(auth, googleProvider);
+            const result = await signInWithRedirect(auth, googleProvider);
             const { user } = result;
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/google-signin`, {
                 name: user.displayName,

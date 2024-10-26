@@ -1,0 +1,110 @@
+/* src/components/Navbar.css */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #3c3c3c;
+    color: white;
+}
+
+.navbar-left h1 {
+    margin: 0;
+    color: #ff6200;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-middle a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.navbar-middle a:hover {
+    color: #ff6200;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.profile-menu {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 5px;
+}
+
+.dropdown-icon {
+    font-size: 0.8rem;
+    margin-left: 5px;
+    transition: transform 0.3s;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.dropdown-item {
+    color: white;
+    padding: 8px 20px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+    background-color: #555;
+}
+
+.btn-logout {
+    background-color: #ff4081;
+    border: none;
+    color: white;
+    margin-left: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #e91e63;
+}
+
+.cart-icon {
+    color: white;
+    font-size: 1.2rem;
+    margin-left: 15px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.cart-icon:hover {
+    color: #ff6200;
+}
