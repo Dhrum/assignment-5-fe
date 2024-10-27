@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaMobileAlt, FaLaptop, FaGamepad } from 'react-icons/fa';
-import './Categories.css';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import './CategoryListComponent.css';
+import { FaEye, FaMobileAlt, FaLaptop, FaGamepad } from 'react-icons/fa';
 
 // Helper function to generate a random number between 5 and 30
 const getRandomProductCount = () => Math.floor(Math.random() * 26) + 5;
@@ -21,29 +23,16 @@ const getCategoryIcon = (category) => {
     }
 };
 
-const Categories = () => {
-    const [categories, setCategories] = useState([]);
+const CategoryListComponent = ({ categories }) => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products`);
-                const products = response.data;
-
-                // Extract unique categories
-                const uniqueCategories = [
-                    ...new Set(products.map((product) => product.category)),
-                ];
-
-                setCategories(uniqueCategories);
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-        };
-
-        fetchCategories();
-    }, []);
+    const categorySliderSettings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        arrows: true,
+    };
 
     const handleViewProducts = (category) => {
         navigate(`/categories/${category}`);
@@ -52,9 +41,12 @@ const Categories = () => {
     return (
         <section className="categories">
             <div className="categories-header">
-                <h2>All Categories</h2>
+                <h2>Categories</h2>
+                <a href="/categories" className="view-all-link">
+                    <FaEye className="view-all-icon" /> View All
+                </a>
             </div>
-            <div className="categories-grid">
+            <Slider {...categorySliderSettings} className="category-slider">
                 {categories.map((category, index) => (
                     <div key={index} className="category-card">
                         <div className="category-icon">
@@ -74,9 +66,9 @@ const Categories = () => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </Slider>
         </section>
     );
 };
 
-export default Categories;
+export default CategoryListComponent;

@@ -1,0 +1,99 @@
+/* src/components/CarouselComponent.css */
+
+.banner-carousel {
+    max-width: 100%;
+    height: 80vh; /* Adjust this height for better visibility on different screens */
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+.banner-carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* This ensures the entire image fits within the container without being cropped */
+    object-position: center; /* Center the image */
+}
+
+.banner-carousel .slick-dots {
+    bottom: 20px;
+}
+
+.banner-carousel .slick-dots li button:before {
+    color: #ff6200;
+}
+
+.banner-carousel .slick-dots li.slick-active button:before {
+    opacity: 0.8;
+    color: #ff4081;
+}
+
+.banner-carousel .slick-prev,
+.banner-carousel .slick-next {
+    width: 40px;
+    height: 40px;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.banner-carousel .slick-prev:hover,
+.banner-carousel .slick-next:hover {
+    background-color: #ff6200;
+    color: white;
+}
+
+.banner-carousel .slick-prev:before,
+.banner-carousel .slick-next:before {
+    font-size: 20px;
+    opacity: 1;
+}
+
+.banner-carousel .slick-prev {
+    left: 10px;
+}
+
+.banner-carousel .slick-next {
+    right: 10px;
+}
+
+/* Adjust height for smaller screens for better responsiveness */
+@media (max-width: 768px) {
+    .banner-carousel {
+        height: 50vh;
+    }
+
+    .banner-carousel .slick-prev,
+    .banner-carousel .slick-next {
+        width: 30px;
+        height: 30px;
+    }
+
+    .banner-carousel .slick-prev:before,
+    .banner-carousel .slick-next:before {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .banner-carousel {
+        height: 40vh;
+    }
+
+    .banner-carousel .slick-prev,
+    .banner-carousel .slick-next {
+        width: 25px;
+        height: 25px;
+    }
+
+    .banner-carousel .slick-prev:before,
+    .banner-carousel .slick-next:before {
+        font-size: 14px;
+    }
+}

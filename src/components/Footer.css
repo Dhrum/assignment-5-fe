@@ -1,7 +1,9 @@
+/* src/components/Footer.css */
+
 .footer {
     background-color: #333;
     color: #ccc;
-    padding: 20px 0;
+    padding: 40px 0 20px;
     text-align: center;
     margin-top: 40px;
 }
@@ -11,28 +13,104 @@
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
     flex-wrap: wrap;
+    gap: 20px;
+    padding: 0 20px;
 }
 
-.footer-content p {
-    margin: 0;
+.footer-about,
+.footer-links,
+.footer-newsletter {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-about h3,
+.footer-links h3,
+.footer-newsletter h3 {
+    color: #ff6200;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.footer-about p {
     font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
 }
 
 .footer-links {
     display: flex;
-    gap: 15px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
 }
 
 .footer-links a {
     color: #ccc;
     text-decoration: none;
     font-size: 14px;
+    transition: color 0.3s;
 }
 
 .footer-links a:hover {
     text-decoration: underline;
+    color: #ff6200;
+}
+
+.footer-newsletter {
+    text-align: left;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.newsletter-input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #444;
     color: #fff;
+    transition: border-color 0.3s;
+}
+
+.newsletter-input:focus {
+    border-color: #ff6200;
+    outline: none;
+}
+
+.btn-subscribe {
+    background-color: #ff6200;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-subscribe:hover {
+    background-color: #e56200;
+}
+
+.social-media {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.social-icon {
+    font-size: 24px;
+    color: #ccc;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.social-icon:hover {
+    color: #ff6200;
+    transform: scale(1.2);
 }

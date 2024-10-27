@@ -1,0 +1,30 @@
+/* src/components/TextBasedCarousel.css */
+
+.offers-carousel {
+    background: #3c3c3c;
+    color: #fffa;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.text-carousel .slick-dots li button:before {
+    color: #ff6200;
+}
+
+.text-carousel .slick-dots li.slick-active button:before {
+    color: #ff4081;
+}
+
+.text-carousel h3 {
+    font-size: 20px;
+    color: white;
+    margin: 0;
+    font-weight: 600;
+    transition: transform 0.3s;
+}
+
+.text-carousel h3:hover {
+    transform: scale(1.05);
+}

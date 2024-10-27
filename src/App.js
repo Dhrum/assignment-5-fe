@@ -10,6 +10,8 @@ import Footer from './components/Footer';
 import Categories from './components/Categories';
 import Products from './components/Products';
 import ProductDetails from './components/ProductDetails';
+import CategoryProductsComponent from './components/CategoryProductsComponent';
+
 
 function App() {
     return (
@@ -24,6 +26,7 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/categories" element={<Categories />} />
+                    <Route path="/categories/:categoryName" element={<CategoryProductsComponent />} />
                     <Route path="/products/:productId" element={<ProductDetails />} />
                 </Routes>
             </main>
