@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import './Products.css'; // Reuse the existing styles for consistent design
+import { Helmet } from 'react-helmet-async';
 
 const CategoryProductsComponent = () => {
     const { categoryName } = useParams(); // Get category name from the URL
@@ -56,6 +57,9 @@ const CategoryProductsComponent = () => {
 
     return (
         <div className="products-container">
+             <Helmet>
+                <title>{categoryName} - Glow Mart</title>
+            </Helmet>
             <h2>{categoryName.toUpperCase()} Products</h2>
             {filteredProducts.length === 0 ? (
                 <p>No products found in this category.</p>

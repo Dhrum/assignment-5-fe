@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
 import './Products.css';
+import { Helmet } from 'react-helmet-async';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [visibleProducts, setVisibleProducts] = useState(15);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -36,20 +39,59 @@ const Products = () => {
         e.target.src = 'https://via.placeholder.com/200?text=No+Image'; // Placeholder for missing images
     };
 
-    const addToCart = (productId) => {
-        // Implement add to cart logic
-        alert(`Product ${productId} added to cart!`);
+    const addToCart = async (productId) => {
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                navigate('/login');
+                return;
+            }
+            const token = await user.getIdToken();
+            await axios.post(
+                `${process.env.REACT_APP_BACKEND_URL}/api/cart`,
+                { productId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            alert('Product added to cart!');
+        } catch (error) {
+            console.error('Error adding product to cart:', error);
+        }
     };
 
-    const addToFavourites = (productId) => {
-        // Implement add to favourites logic
-        alert(`Product ${productId} added to favourites!`);
+    const addToFavourites = async (productId) => {
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                navigate('/login');
+                return;
+            }
+            const token = await user.getIdToken();
+            await axios.post(
+                `${process.env.REACT_APP_BACKEND_URL}/api/favourites`,
+                { productId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            alert('Product added to favourites!');
+        } catch (error) {
+            console.error('Error adding product to favourites:', error);
+        }
     };
 
     if (loading) return <p>Loading...</p>;
 
     return (
         <div className="products-container">
+            <Helmet>
+                <title>Products - Glow Mart</title>
+            </Helmet>
             <h2>All Products</h2>
             <div className="product-list">
                 {products.slice(0, visibleProducts).map((product) => (
@@ -78,7 +120,7 @@ const Products = () => {
                                 <Link to={`/products/${product._id}`} className="btn btn-view-details">
                                     View Details
                                 </Link>
-                                <button onClick={() => alert('Buy Now action')} className="btn btn-buy-now">
+                                <button onClick={() => navigate(`/products/${product._id}/buy`)} className="btn btn-buy-now">
                                     Buy Now
                                 </button>
                             </div>

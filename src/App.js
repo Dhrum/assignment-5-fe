@@ -27,7 +27,7 @@ function App() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/categories" element={<Categories />} />
                     <Route path="/categories/:categoryName" element={<CategoryProductsComponent />} />
-                    <Route path="/products/:productId" element={<ProductDetails />} />
+                    <Route path="/products/:id" element={<ProductDetails />} />
                 </Routes>
             </main>
             <Footer />

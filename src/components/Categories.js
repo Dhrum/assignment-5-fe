@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaMobileAlt, FaLaptop, FaGamepad } from 'react-icons/fa';
 import './Categories.css';
+import { Helmet } from 'react-helmet-async';
 
 // Helper function to generate a random number between 5 and 30
 const getRandomProductCount = () => Math.floor(Math.random() * 26) + 5;
@@ -51,6 +52,9 @@ const Categories = () => {
 
     return (
         <section className="categories">
+            <Helmet>
+                <title>Category - Glow Mart</title>
+            </Helmet>
             <div className="categories-header">
                 <h2>All Categories</h2>
             </div>
